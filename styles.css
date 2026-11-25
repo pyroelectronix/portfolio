@@ -131,7 +131,7 @@ body.ready .split .ch, .split.in .ch { transform: translateY(0); }
   display: grid; place-items: center; transition: transform 0.2s ease-out; transform-style: preserve-3d; will-change: transform;
 }
 .photo .ph { font-family: var(--display); font-size: 6rem; color: rgba(255, 255, 255, 0.12); }
-.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; }
 .hello-title { font-size: clamp(3.5rem, 12vw, 10.5rem); }
 .hello-text { min-width: 0; }
 .bio { margin-top: 0.75rem; text-align: justify; hyphens: auto; font-weight: 300; max-width: 52rem; text-wrap: pretty; }
