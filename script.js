@@ -83,47 +83,104 @@
     if (t.dataset.img) t.style.backgroundImage = `url("${t.dataset.img}")`;
   });
 
-  // Apparel carousel: duplicate the cards for a seamless loop and set a constant speed.
-  // CSS pauses it on hover / focus; touch devices pause while a finger is on it.
+  // Apparel carousel: cards sit on a 3D ring that rotates continuously.
+  // It eases to a stop while the pointer is over it (or it is focused, touched or dragged)
+  // and picks up again when the pointer leaves.
   const apparel = $("#apparel");
   const aWrap = $("#apparelMarquee");
   const aTrack = $("#aTrack");
-  const A_SPEED = 55; // pixels per second, raise for faster scrolling
-  if (!canHover) $(".a-hint").textContent = "Touch to pause · tap to view";
-  if (!reduced) {
-    $$(".a-card", aTrack).forEach((card) => {
-      const copy = card.cloneNode(true);
-      copy.setAttribute("aria-hidden", "true");
-      copy.tabIndex = -1;
-      aTrack.appendChild(copy);
-    });
-  }
-  const setSpeed = () => {
-    const half = aTrack.scrollWidth / (reduced ? 1 : 2);
-    if (half > 0) aTrack.style.setProperty("--dur", Math.max(20, half / A_SPEED) + "s");
-  };
-  setSpeed();
-  addEventListener("load", setSpeed);
-  addEventListener("resize", setSpeed);
-  let touchTimer;
-  aWrap.addEventListener("touchstart", () => { clearTimeout(touchTimer); aWrap.classList.add("paused"); }, { passive: true });
-  const touchEnd = () => { clearTimeout(touchTimer); touchTimer = setTimeout(() => aWrap.classList.remove("paused"), 1800); };
-  aWrap.addEventListener("touchend", touchEnd, { passive: true });
-  aWrap.addEventListener("touchcancel", touchEnd, { passive: true });
+  const aCards = $$(".a-card", aTrack);
+  const A_SPEED = 4; // degrees per second, raise for faster rotation (360 = one full turn)
+  const A_N = aCards.length;
+  const A_STEP = 360 / A_N;
+  let aAngle = 0, aR = 0, aVel = 0, aHold = false, aDrag = false, dragMoved = false, aTween = null, aInView = false, aLast = performance.now();
+  if (!canHover) $(".a-hint").textContent = "Drag to spin · tap to view";
 
-  // Filter
-  const tiles = $$(".tile");
-  $$(".chip").forEach((chip) => {
-    chip.addEventListener("click", () => {
-      $$(".chip").forEach((c) => c.classList.remove("active"));
-      chip.classList.add("active");
-      const f = chip.dataset.filter;
-      tiles.forEach((t) => t.classList.toggle("hidden", f !== "all" && t.dataset.cat !== f));
-      const showApparel = f === "all" || f === apparel.dataset.cat;
-      apparel.classList.toggle("hidden", !showApparel);
-      if (showApparel) setSpeed();
+  const aRender = () => {
+    aTrack.style.transform = `translateZ(${-aR}px) rotateY(${aAngle}deg)`;
+    aCards.forEach((card, i) => {
+      const a = ((((i * A_STEP + aAngle) % 360) + 540) % 360) - 180; // -180..180, 0 = facing front
+      card.style.setProperty("--dim", ((1 - Math.cos((a * Math.PI) / 180)) * 0.38).toFixed(3));
     });
+  };
+  const aLayout = () => {
+    const cw = aTrack.offsetWidth;
+    if (!cw) return; // hidden
+    aR = Math.round((cw / 2 / Math.tan(Math.PI / A_N)) * 1.12);
+    aCards.forEach((card, i) => (card.style.transform = `rotateY(${i * A_STEP}deg) translateZ(${aR}px)`));
+    aRender();
+  };
+  const aTick = (now) => {
+    const dt = Math.min((now - aLast) / 1000, 0.05);
+    aLast = now;
+    if (aInView && aR && !apparel.classList.contains("hidden")) {
+      if (aTween !== null) {
+        const d = aTween - aAngle;
+        aAngle += d * Math.min(1, dt * 7);
+        if (Math.abs(d) < 0.05) { aAngle = aTween; aTween = null; }
+        aRender();
+      } else if (!aDrag) {
+        const target = aHold || reduced ? 0 : -A_SPEED;
+        aVel += (target - aVel) * Math.min(1, dt * 6); // ease in / out
+        if (Math.abs(aVel) > 0.001) { aAngle += aVel * dt; aRender(); }
+      }
+    }
+    requestAnimationFrame(aTick);
+  };
+  new IntersectionObserver((en) => { aInView = en[0].isIntersecting; }).observe(aWrap);
+  addEventListener("resize", aLayout);
+  addEventListener("load", aLayout);
+  requestAnimationFrame(aTick);
+
+  // pause while pointing at / focusing / touching the designs
+  aWrap.addEventListener("mouseenter", () => (aHold = true));
+  aWrap.addEventListener("mouseleave", () => (aHold = false));
+  aWrap.addEventListener("focusin", () => (aHold = true));
+  aWrap.addEventListener("focusout", () => (aHold = false));
+  let aTouchTimer;
+  aWrap.addEventListener("touchstart", () => { clearTimeout(aTouchTimer); aHold = true; }, { passive: true });
+  const aTouchEnd = () => { clearTimeout(aTouchTimer); aTouchTimer = setTimeout(() => (aHold = false), 1800); };
+  aWrap.addEventListener("touchend", aTouchEnd, { passive: true });
+  aWrap.addEventListener("touchcancel", aTouchEnd, { passive: true });
+
+  // drag (mouse or finger) to spin the ring
+  let aStartX = 0, aStartAngle = 0;
+  aWrap.addEventListener("pointerdown", (e) => {
+    aDrag = true; dragMoved = false; aTween = null;
+    aStartX = e.clientX; aStartAngle = aAngle;
   });
+  addEventListener("pointermove", (e) => {
+    if (!aDrag) return;
+    const dx = e.clientX - aStartX;
+    if (Math.abs(dx) > 6) dragMoved = true;
+    if (dragMoved) { aAngle = aStartAngle + dx * 0.3; aRender(); }
+  });
+  const aEndDrag = () => { if (aDrag) { aDrag = false; aVel = 0; setTimeout(() => (dragMoved = false), 0); } };
+  addEventListener("pointerup", aEndDrag);
+  addEventListener("pointercancel", aEndDrag);
+
+  // previous / next buttons
+  const aGo = (dir) => {
+    const base = aTween !== null ? aTween : aAngle;
+    aTween = Math.round(base / A_STEP) * A_STEP + dir * A_STEP;
+  };
+  $("#aPrev").addEventListener("click", () => aGo(1));
+  $("#aNext").addEventListener("click", () => aGo(-1));
+
+  // Selected work: nothing is shown until a category tab is clicked
+  const tiles = $$(".tile");
+  const chips = $$(".chip");
+  const workEmpty = $("#workEmpty");
+  const showCategory = (f) => {
+    chips.forEach((c) => c.classList.toggle("active", c.dataset.filter === f));
+    tiles.forEach((t) => t.classList.toggle("hidden", t.dataset.cat !== f));
+    const showApparel = f === apparel.dataset.cat;
+    apparel.classList.toggle("hidden", !showApparel);
+    workEmpty.classList.toggle("hidden", !!f);
+    if (showApparel) aLayout();
+  };
+  showCategory(null);
+  chips.forEach((chip) => chip.addEventListener("click", () => showCategory(chip.dataset.filter)));
 
   // Lightbox
   const lb = $("#lightbox");
@@ -148,10 +205,10 @@
       openLb(t.dataset.img, t.dataset.title);
     });
   });
-  // Apparel cards (event delegation also covers the duplicated cards)
+  // Apparel cards
   aTrack.addEventListener("click", (e) => {
     const card = e.target.closest(".a-card");
-    if (card) openLb(card.dataset.img, card.dataset.title, card.style.getPropertyValue("--c"));
+    if (card && !dragMoved) openLb(card.dataset.img, card.dataset.title, card.style.getPropertyValue("--c"));
   });
   $("#lbClose").addEventListener("click", closeLb);
   lb.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
