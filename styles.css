@@ -1,6 +1,6 @@
 :root {
   --bg: #0c0c0c;
-  --panel: rgba(255, 255, 255, 0.025);
+  --panel: rgba(12, 12, 12, 0.42);
   --fg: #d8d8d8;
   --muted: #8d8d8a;
   --line: rgba(255, 255, 255, 0.14);
@@ -94,8 +94,12 @@ body.ready .split .ch, .split.in .ch { transform: translateY(0); }
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
 .reveal.in { opacity: 1; transform: none; }
 
+/* Circuit background */
+#circuit { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 2s ease; }
+main, .footer { position: relative; z-index: 1; }
+
 /* Cover */
-.cover { min-height: calc(100svh - var(--gap) * 2 - var(--gap)); display: flex; flex-direction: column; padding-top: clamp(5rem, 12vh, 8rem); }
+.cover { min-height: 92svh; background: transparent; display: flex; flex-direction: column; padding-top: clamp(5rem, 12vh, 8rem); }
 .cover-title { display: flex; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem; }
 .cover .display { font-size: clamp(4.5rem, 19vw, 17rem); }
 .tag { margin-top: 0.4em; }
