@@ -144,12 +144,100 @@
         </div>
       </div>
 
+      <!-- APPAREL DESIGN: auto-scrolling card carousel. It pauses while the mouse is over it and resumes when the mouse leaves.
+           To add a design: copy one <button class="a-card"> block, change data-img, data-title, src, alt and the two text lines. -->
+      <div class="apparel" id="apparel" data-cat="social">
+        <div class="apparel-head reveal">
+          <h3>Apparel Design</h3>
+          <span class="a-hint">Hover to pause &middot; click to view</span>
+        </div>
+        <div class="a-marquee" id="apparelMarquee">
+          <div class="a-track" id="aTrack">
+          <button class="a-card" type="button" data-img="assets/apparel/caltag-set-1.webp" data-title="Caltag Jersey &amp; Shorts" style="--c:#f2eda4">
+            <span class="a-img"><img src="assets/apparel/caltag-set-1.webp" width="1400" height="1803" decoding="async" alt="Caltag Jersey &amp; Shorts - Sepak Takraw Set, front and back" /></span>
+            <span class="a-meta"><b>Caltag Jersey &amp; Shorts</b><small>Sepak Takraw Set</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/takrawistang.webp" data-title="Takrawistang" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/apparel/takrawistang.webp" width="1400" height="940" decoding="async" alt="Takrawistang - Sepak Takraw Jersey, front and back" /></span>
+            <span class="a-meta"><b>Takrawistang</b><small>Sepak Takraw Jersey</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/bumberong-set.webp" data-title="Bumberong Jersey &amp; Shorts" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/apparel/bumberong-set.webp" width="1400" height="1493" decoding="async" alt="Bumberong Jersey &amp; Shorts - Basketball Set, front and back" /></span>
+            <span class="a-meta"><b>Bumberong Jersey &amp; Shorts</b><small>Basketball Set</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/tagkawayanin-gold.webp" data-title="Tagkawayanin Gold" style="--c:#fefefe">
+            <span class="a-img"><img src="assets/apparel/tagkawayanin-gold.webp" width="1400" height="940" decoding="async" alt="Tagkawayanin Gold - Sepak Takraw Jersey, front and back" /></span>
+            <span class="a-meta"><b>Tagkawayanin Gold</b><small>Sepak Takraw Jersey</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/mosar-polo.webp" data-title="MOSAR Polo" style="--c:#fefefe">
+            <span class="a-img"><img src="assets/apparel/mosar-polo.webp" width="1400" height="1007" loading="lazy" decoding="async" alt="MOSAR Polo - Polo Shirt, front and back" /></span>
+            <span class="a-meta"><b>MOSAR Polo</b><small>Polo Shirt</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/caltag-set-2.webp" data-title="Caltag Jersey &amp; Shorts II" style="--c:#f2eda4">
+            <span class="a-img"><img src="assets/apparel/caltag-set-2.webp" width="1400" height="1777" loading="lazy" decoding="async" alt="Caltag Jersey &amp; Shorts II - Sepak Takraw Set, front and back" /></span>
+            <span class="a-meta"><b>Caltag Jersey &amp; Shorts II</b><small>Sepak Takraw Set</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/sepak-bw.webp" data-title="Sepak Takraw Black &amp; White" style="--c:#d8d8d8">
+            <span class="a-img"><img src="assets/apparel/sepak-bw.webp" width="1400" height="989" loading="lazy" decoding="async" alt="Sepak Takraw Black &amp; White - Sepak Takraw Jersey, front and back" /></span>
+            <span class="a-meta"><b>Sepak Takraw Black &amp; White</b><small>Sepak Takraw Jersey</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/math-club.webp" data-title="Math Club Polo" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/apparel/math-club.webp" width="1400" height="1002" loading="lazy" decoding="async" alt="Math Club Polo - Polo Shirt, front and back" /></span>
+            <span class="a-meta"><b>Math Club Polo</b><small>Polo Shirt</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/tagkawayanin-blue.webp" data-title="Tagkawayanin Blue" style="--c:#fcfcfc">
+            <span class="a-img"><img src="assets/apparel/tagkawayanin-blue.webp" width="1400" height="939" loading="lazy" decoding="async" alt="Tagkawayanin Blue - Sepak Takraw Jersey, front and back" /></span>
+            <span class="a-meta"><b>Tagkawayanin Blue</b><small>Sepak Takraw Jersey</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/slsu-historical.webp" data-title="SLSU Historical Society" style="--c:#bea18d">
+            <span class="a-img"><img src="assets/apparel/slsu-historical.webp" width="1400" height="1008" loading="lazy" decoding="async" alt="SLSU Historical Society - Polo Shirt, front and back" /></span>
+            <span class="a-meta"><b>SLSU Historical Society</b><small>Polo Shirt</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/caltag-3.webp" data-title="Caltag Gradient Jersey" style="--c:#f2eda4">
+            <span class="a-img"><img src="assets/apparel/caltag-3.webp" width="1400" height="940" loading="lazy" decoding="async" alt="Caltag Gradient Jersey - Sepak Takraw Jersey, front and back" /></span>
+            <span class="a-meta"><b>Caltag Gradient Jersey</b><small>Sepak Takraw Jersey</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/bumberong-jersey.webp" data-title="Bumberong Jersey" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/apparel/bumberong-jersey.webp" width="1400" height="1169" loading="lazy" decoding="async" alt="Bumberong Jersey - Basketball Jersey, front and back" /></span>
+            <span class="a-meta"><b>Bumberong Jersey</b><small>Basketball Jersey</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/mosar-long-1.webp" data-title="MOSAR Long Sleeve" style="--c:#f2f2f2">
+            <span class="a-img"><img src="assets/apparel/mosar-long-1.webp" width="1011" height="660" loading="lazy" decoding="async" alt="MOSAR Long Sleeve - Long Sleeve, front and back" /></span>
+            <span class="a-meta"><b>MOSAR Long Sleeve</b><small>Long Sleeve</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/tagkawayanin-floral.webp" data-title="Tagkawayanin Floral" style="--c:#fdfdfd">
+            <span class="a-img"><img src="assets/apparel/tagkawayanin-floral.webp" width="1400" height="940" loading="lazy" decoding="async" alt="Tagkawayanin Floral - Sepak Takraw Jersey, front and back" /></span>
+            <span class="a-meta"><b>Tagkawayanin Floral</b><small>Sepak Takraw Jersey</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/sepak-black.webp" data-title="Sepak Takraw Black" style="--c:#d8d8d8">
+            <span class="a-img"><img src="assets/apparel/sepak-black.webp" width="1400" height="989" loading="lazy" decoding="async" alt="Sepak Takraw Black - Sepak Takraw Jersey, front and back" /></span>
+            <span class="a-meta"><b>Sepak Takraw Black</b><small>Sepak Takraw Jersey</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/caltag-4.webp" data-title="Caltag Home Jersey" style="--c:#f2eda4">
+            <span class="a-img"><img src="assets/apparel/caltag-4.webp" width="1400" height="943" loading="lazy" decoding="async" alt="Caltag Home Jersey - Sepak Takraw Jersey, front and back" /></span>
+            <span class="a-meta"><b>Caltag Home Jersey</b><small>Sepak Takraw Jersey</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/mosar-long-2.webp" data-title="MOSAR Long Sleeve II" style="--c:#f2f2f2">
+            <span class="a-img"><img src="assets/apparel/mosar-long-2.webp" width="991" height="658" loading="lazy" decoding="async" alt="MOSAR Long Sleeve II - Long Sleeve, front and back" /></span>
+            <span class="a-meta"><b>MOSAR Long Sleeve II</b><small>Long Sleeve</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/caltag-5.webp" data-title="Caltag Dark Jersey" style="--c:#f2eda4">
+            <span class="a-img"><img src="assets/apparel/caltag-5.webp" width="1400" height="940" loading="lazy" decoding="async" alt="Caltag Dark Jersey - Sepak Takraw Jersey, front and back" /></span>
+            <span class="a-meta"><b>Caltag Dark Jersey</b><small>Sepak Takraw Jersey</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/apparel/kaway-tee.webp" data-title="Kaway Festival 2025 Tee" style="--c:#000000">
+            <span class="a-img"><img src="assets/apparel/kaway-tee.webp" width="1400" height="860" loading="lazy" decoding="async" alt="Kaway Festival 2025 Tee - T-Shirt, front and back" /></span>
+            <span class="a-meta"><b>Kaway Festival 2025 Tee</b><small>T-Shirt</small></span>
+          </button>
+          </div>
+        </div>
+      </div>
+
       <div class="grid" id="grid">
         <!-- EDIT: set data-img to your image path (e.g. assets/work-1.jpg) and update the title.
              data-cat must stay one of: branding (Certificates), logo (Tarpaulin), social (Apparel Design), poster (Website and Web Application) -->
         <a class="tile reveal" data-cat="branding" data-title="Project One" data-img="" href="#work"><span class="num">01</span><span class="t">Project One</span><span class="c">Certificates</span></a>
         <a class="tile reveal" data-cat="logo" data-title="Project Two" data-img="" href="#work"><span class="num">02</span><span class="t">Project Two</span><span class="c">Tarpaulin</span></a>
-        <a class="tile reveal" data-cat="social" data-title="Project Three" data-img="" href="#work"><span class="num">03</span><span class="t">Project Three</span><span class="c">Apparel Design</span></a>
         <a class="tile reveal" data-cat="poster" data-title="Project Four" data-img="" href="#work"><span class="num">04</span><span class="t">Project Four</span><span class="c">Website and Web Application</span></a>
         <a class="tile reveal" data-cat="branding" data-title="Project Five" data-img="" href="#work"><span class="num">05</span><span class="t">Project Five</span><span class="c">Certificates</span></a>
         <a class="tile reveal" data-cat="logo" data-title="Project Six" data-img="" href="#work"><span class="num">06</span><span class="t">Project Six</span><span class="c">Tarpaulin</span></a>
