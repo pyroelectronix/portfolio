@@ -10,7 +10,7 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --gap: 12px;
   --radius: 14px;
-  --maxw: none; /* content fills the window (no side margins). Use e.g. 1600px to cap the width again */
+  --maxw: 1360px; /* content never stretches wider than this, at any zoom level */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
