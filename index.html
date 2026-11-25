@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ian Monson — Portfolio</title>
+  <meta name="description" content="Portfolio of Ian Monson. Selected work, about, and contact." />
+  <meta property="og:title" content="Ian Monson — Portfolio" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Apply saved theme before paint to avoid flash
+    try {
+      var t = localStorage.getItem("theme");
+      if (t) document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="loader" id="loader" aria-hidden="true"><span>IM</span></div>
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="#top" class="logo">Ian Monson<span>.</span></a>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+        <span class="dot"></span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <p class="eyebrow reveal">Portfolio — 2026</p>
+      <h1 class="hero-title">
+        <span class="line"><span>Hello, I'm Ian.</span></span>
+        <span class="line"><span>I design &amp; build <em>things</em></span></span>
+        <span class="line"><span>for the web.</span></span>
+      </h1>
+      <p class="hero-sub reveal">
+        <!-- EDIT: your one-line tagline -->
+        A short tagline about what you do and who you help goes here.
+      </p>
+      <div class="hero-cta reveal">
+        <a href="#work" class="btn magnetic">View my work</a>
+        <a href="#contact" class="btn ghost magnetic">Get in touch</a>
+      </div>
+      <a href="#work" class="scroll-hint" aria-label="Scroll down">Scroll <span></span></a>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <!-- EDIT: your skills / services -->
+        <span>Web Design</span><span>•</span><span>Development</span><span>•</span>
+        <span>Branding</span><span>•</span><span>Graphic Design</span><span>•</span>
+        <span>Web Design</span><span>•</span><span>Development</span><span>•</span>
+        <span>Branding</span><span>•</span><span>Graphic Design</span><span>•</span>
+      </div>
+    </div>
+
+    <!-- WORK -->
+    <section class="section" id="work">
+      <div class="section-head reveal">
+        <h2>Selected work</h2>
+        <span class="count">(04)</span>
+      </div>
+
+      <ul class="projects">
+        <!-- EDIT: replace titles, categories, years, links, and image URLs -->
+        <li class="project reveal" data-img="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=80">
+          <a href="#" target="_blank" rel="noopener">
+            <span class="p-index">01</span>
+            <span class="p-title">Project One</span>
+            <span class="p-cat">Web Design</span>
+            <span class="p-year">2026</span>
+          </a>
+        </li>
+        <li class="project reveal" data-img="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=900&q=80">
+          <a href="#" target="_blank" rel="noopener">
+            <span class="p-index">02</span>
+            <span class="p-title">Project Two</span>
+            <span class="p-cat">Development</span>
+            <span class="p-year">2025</span>
+          </a>
+        </li>
+        <li class="project reveal" data-img="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=900&q=80">
+          <a href="#" target="_blank" rel="noopener">
+            <span class="p-index">03</span>
+            <span class="p-title">Project Three</span>
+            <span class="p-cat">Branding</span>
+            <span class="p-year">2025</span>
+          </a>
+        </li>
+        <li class="project reveal" data-img="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=900&q=80">
+          <a href="#" target="_blank" rel="noopener">
+            <span class="p-index">04</span>
+            <span class="p-title">Project Four</span>
+            <span class="p-cat">Graphic Design</span>
+            <span class="p-year">2024</span>
+          </a>
+        </li>
+      </ul>
+      <div class="preview" id="preview" aria-hidden="true"><img alt="" /></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section about" id="about">
+      <div class="section-head reveal">
+        <h2>About</h2>
+        <span class="count">(Me)</span>
+      </div>
+      <div class="about-grid">
+        <p class="about-lead reveal">
+          <!-- EDIT: your bio -->
+          I'm a creative who cares about clean design, thoughtful details, and building experiences people enjoy using.
+        </p>
+        <div class="about-side reveal">
+          <p>
+            Write a second paragraph here: your background, what drives you, and what you're currently working on.
+          </p>
+          <div class="stats">
+            <div><strong data-count="3">0</strong><span>Years experience</span></div>
+            <div><strong data-count="20">0</strong><span>Projects done</span></div>
+            <div><strong data-count="10">0</strong><span>Happy clients</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skills reveal">
+        <h3>Toolkit</h3>
+        <ul>
+          <!-- EDIT -->
+          <li>HTML / CSS</li><li>JavaScript</li><li>Figma</li><li>Canva</li>
+          <li>Photoshop</li><li>Illustrator</li><li>UI / UX</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact">
+      <p class="eyebrow reveal">Have an idea?</p>
+      <a class="big-link magnetic reveal" href="mailto:hello@example.com" id="emailLink">
+        Let's work together<span class="arrow">↗</span>
+      </a>
+      <div class="socials reveal">
+        <!-- EDIT: your real links -->
+        <a href="#" target="_blank" rel="noopener">Facebook</a>
+        <a href="#" target="_blank" rel="noopener">Instagram</a>
+        <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="#" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© <span id="year"></span> Ian Monson</span>
+    <button id="toTop" class="to-top">Back to top ↑</button>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
