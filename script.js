@@ -197,7 +197,7 @@
     lbBody.style.backgroundImage = it.img ? `url("${it.img}")` : "";
     lbBody.style.backgroundColor = it.bg || "";
     lbCap.textContent = it.title || "";
-    lbCount.textContent = n > 1 ? `${lbIndex + 1} / ${n}` : "";
+    lbCount.textContent = n > 1 ? `${lbIndex + 1} / ${n}` + (canHover ? "  ·  use ← → keys to navigate" : "") : "";
     lb.classList.toggle("single", n < 2);
     if (dir && !reduced) {
       lbBody.animate(
