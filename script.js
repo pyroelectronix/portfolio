@@ -94,7 +94,8 @@
   const A_N = aCards.length;
   const A_STEP = 360 / A_N;
   let aAngle = 0, aR = 0, aVel = 0, aHold = false, aDrag = false, dragMoved = false, aTween = null, aInView = false, aLast = performance.now();
-  if (!canHover) $(".a-hint").textContent = "Drag to spin · tap to view";
+  const aHint = $(".a-hint");
+  if (!canHover && aHint) aHint.textContent = "Drag to spin · tap to view";
 
   const aRender = () => {
     aTrack.style.transform = `translateZ(${-aR}px) rotateY(${aAngle}deg)`;
@@ -164,8 +165,8 @@
     const base = aTween !== null ? aTween : aAngle;
     aTween = Math.round(base / A_STEP) * A_STEP + dir * A_STEP;
   };
-  $("#aPrev").addEventListener("click", () => aGo(1));
-  $("#aNext").addEventListener("click", () => aGo(-1));
+  $("#aPrev")?.addEventListener("click", () => aGo(1));
+  $("#aNext")?.addEventListener("click", () => aGo(-1));
 
   // Selected work: nothing is shown until a category tab is clicked
   const tiles = $$(".tile");
@@ -176,7 +177,7 @@
     tiles.forEach((t) => t.classList.toggle("hidden", t.dataset.cat !== f));
     const showApparel = f === apparel.dataset.cat;
     apparel.classList.toggle("hidden", !showApparel);
-    workEmpty.classList.toggle("hidden", !!f);
+    workEmpty?.classList.toggle("hidden", !!f);
     if (showApparel) aLayout();
   };
   showCategory(null);
@@ -197,7 +198,7 @@
     lbBody.style.backgroundImage = it.img ? `url("${it.img}")` : "";
     lbBody.style.backgroundColor = it.bg || "";
     lbCap.textContent = it.title || "";
-    lbCount.textContent = n > 1 ? `${lbIndex + 1} / ${n}` + (canHover ? "  ·  use ← → keys to navigate" : "") : "";
+    if (lbCount) lbCount.textContent = n > 1 ? `${lbIndex + 1} / ${n}` + (canHover ? "  ·  use ← → keys to navigate" : "") : "";
     lb.classList.toggle("single", n < 2);
     if (dir && !reduced) {
       lbBody.animate(
@@ -237,9 +238,9 @@
     const card = e.target.closest(".a-card");
     if (card && !dragMoved) openLb(aCards.map(toItem), aCards.indexOf(card));
   });
-  $("#lbClose").addEventListener("click", closeLb);
-  $("#lbPrev").addEventListener("click", () => lbStep(-1));
-  $("#lbNext").addEventListener("click", () => lbStep(1));
+  $("#lbClose")?.addEventListener("click", closeLb);
+  $("#lbPrev")?.addEventListener("click", () => lbStep(-1));
+  $("#lbNext")?.addEventListener("click", () => lbStep(1));
   lb.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
   addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeLb();
