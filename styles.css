@@ -99,7 +99,9 @@ body.ready .split .ch, .split.in .ch { transform: translateY(0); }
 main, .footer { position: relative; z-index: 1; }
 
 /* Cover */
-.cover { min-height: 92svh; background: transparent; display: flex; flex-direction: column; padding-top: clamp(5rem, 12vh, 8rem); }
+.cover { min-height: 92svh; background: transparent; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-block: 5rem 4rem; }
+/* The block is centered in the frame; its text stays left-aligned inside */
+.cover-inner { width: fit-content; max-width: 100%; text-align: left; }
 .cover-title { display: flex; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem; }
 .cover .display { font-size: clamp(4.5rem, 19vw, 17rem); }
 .tag { margin-top: 0.4em; }
