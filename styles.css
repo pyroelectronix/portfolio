@@ -282,6 +282,19 @@ body.ready .split .ch, .split.in .ch { transform: translateY(0); }
 .lb-body { width: min(92vw, 1100px); height: min(74vh, 720px); height: min(74dvh, 720px); border-radius: 12px; border: 1px solid var(--line); background: linear-gradient(160deg, #262626, #121212) center / contain no-repeat; transform: scale(0.94); transition: transform 0.6s var(--ease); }
 .lightbox.show .lb-body { transform: scale(1); }
 .lb-cap { font-family: var(--display); text-transform: uppercase; font-size: 1.6rem; color: var(--fg); text-align: center; }
+.lb-nav {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; width: 52px; height: 52px; border-radius: 50%;
+  border: 1px solid var(--line); background: rgba(12, 12, 12, 0.65); color: var(--fg); font-size: 1.9rem; line-height: 1; padding-bottom: 4px;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+}
+.lb-prev { left: clamp(0.5rem, 2vw, 1.5rem); }
+.lb-next { right: clamp(0.5rem, 2vw, 1.5rem); }
+.lb-nav:hover { border-color: var(--accent); color: var(--accent); }
+.lb-nav:active { background: var(--accent); color: #141414; }
+.lightbox.single .lb-nav { display: none; }
+.lb-count { font-size: 0.85rem; color: var(--muted); }
+.lb-count:empty { display: none; }
+@media (max-width: 600px) { .lb-nav { width: 42px; height: 42px; font-size: 1.5rem; } }
 .lb-close { position: absolute; top: 1.25rem; right: 1.25rem; font-size: 1.4rem; padding: 0.5rem 0.8rem; border: 1px solid var(--line); border-radius: 99px; transition: border-color 0.3s, color 0.3s; }
 .lb-close:hover { color: var(--accent); border-color: var(--accent); }
 
