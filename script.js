@@ -7,22 +7,35 @@
   // Year
   $("#year").textContent = $("#year2").textContent = new Date().getFullYear();
 
-  // Split headings into letters for the slide-up animation
+  // Split headings into letters for the slide-up animation.
+  // Letters are grouped into words (no-wrap) with real spaces between them,
+  // so text wraps only between words at any screen size or zoom level.
   $$("[data-split]").forEach((el) => {
     const nodes = [...el.childNodes];
-    el.textContent = "";
     el.setAttribute("aria-label", nodes.map((n) => n.textContent).join(""));
+    el.textContent = "";
     let i = 0;
     nodes.forEach((node) => {
       const isEm = node.nodeType === 1 && node.tagName === "EM";
       const wrap = isEm ? document.createElement("em") : el;
+      let word = null;
       [...node.textContent].forEach((c) => {
+        if (c === " ") {
+          word = null;
+          wrap.appendChild(document.createTextNode(" "));
+          return;
+        }
+        if (!word) {
+          word = document.createElement("span");
+          word.className = "word";
+          word.setAttribute("aria-hidden", "true");
+          wrap.appendChild(word);
+        }
         const s = document.createElement("span");
-        s.className = "ch" + (c === " " ? " sp" : "");
+        s.className = "ch";
         s.style.setProperty("--i", i++);
-        s.setAttribute("aria-hidden", "true");
-        s.textContent = c === " " ? "\u00A0" : c;
-        wrap.appendChild(s);
+        s.textContent = c;
+        word.appendChild(s);
       });
       if (isEm) el.appendChild(wrap);
     });
@@ -42,7 +55,7 @@
   addEventListener("scroll", () => {
     const y = scrollY;
     const max = document.documentElement.scrollHeight - innerHeight;
-    bar.style.width = (y / max) * 100 + "%";
+    bar.style.width = (max > 0 ? (y / max) * 100 : 0) + "%";
     nav.classList.toggle("hide", y > lastY && y > 300);
     lastY = y;
   }, { passive: true });
@@ -54,7 +67,7 @@
       e.target.classList.add("in");
       io.unobserve(e.target);
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.1 });
   $$(".reveal").forEach((el, i) => {
     el.style.transitionDelay = (i % 3) * 90 + "ms";
     io.observe(el);
