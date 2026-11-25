@@ -83,6 +83,34 @@
     if (t.dataset.img) t.style.backgroundImage = `url("${t.dataset.img}")`;
   });
 
+  // Apparel carousel: duplicate the cards for a seamless loop and set a constant speed.
+  // CSS pauses it on hover / focus; touch devices pause while a finger is on it.
+  const apparel = $("#apparel");
+  const aWrap = $("#apparelMarquee");
+  const aTrack = $("#aTrack");
+  const A_SPEED = 55; // pixels per second, raise for faster scrolling
+  if (!canHover) $(".a-hint").textContent = "Touch to pause · tap to view";
+  if (!reduced) {
+    $$(".a-card", aTrack).forEach((card) => {
+      const copy = card.cloneNode(true);
+      copy.setAttribute("aria-hidden", "true");
+      copy.tabIndex = -1;
+      aTrack.appendChild(copy);
+    });
+  }
+  const setSpeed = () => {
+    const half = aTrack.scrollWidth / (reduced ? 1 : 2);
+    if (half > 0) aTrack.style.setProperty("--dur", Math.max(20, half / A_SPEED) + "s");
+  };
+  setSpeed();
+  addEventListener("load", setSpeed);
+  addEventListener("resize", setSpeed);
+  let touchTimer;
+  aWrap.addEventListener("touchstart", () => { clearTimeout(touchTimer); aWrap.classList.add("paused"); }, { passive: true });
+  const touchEnd = () => { clearTimeout(touchTimer); touchTimer = setTimeout(() => aWrap.classList.remove("paused"), 1800); };
+  aWrap.addEventListener("touchend", touchEnd, { passive: true });
+  aWrap.addEventListener("touchcancel", touchEnd, { passive: true });
+
   // Filter
   const tiles = $$(".tile");
   $$(".chip").forEach((chip) => {
@@ -91,6 +119,9 @@
       chip.classList.add("active");
       const f = chip.dataset.filter;
       tiles.forEach((t) => t.classList.toggle("hidden", f !== "all" && t.dataset.cat !== f));
+      const showApparel = f === "all" || f === apparel.dataset.cat;
+      apparel.classList.toggle("hidden", !showApparel);
+      if (showApparel) setSpeed();
     });
   });
 
@@ -103,15 +134,24 @@
     lb.setAttribute("aria-hidden", "true");
     setTimeout(() => lb.classList.remove("open"), 400);
   };
+  const openLb = (img, title, bg) => {
+    lbBody.style.backgroundImage = img ? `url("${img}")` : "";
+    lbBody.style.backgroundColor = bg || "";
+    lbCap.textContent = title || "";
+    lb.classList.add("open");
+    lb.setAttribute("aria-hidden", "false");
+    requestAnimationFrame(() => lb.classList.add("show"));
+  };
   tiles.forEach((t) => {
     t.addEventListener("click", (e) => {
       e.preventDefault();
-      lbBody.style.backgroundImage = t.dataset.img ? `url("${t.dataset.img}")` : "";
-      lbCap.textContent = t.dataset.title;
-      lb.classList.add("open");
-      lb.setAttribute("aria-hidden", "false");
-      requestAnimationFrame(() => lb.classList.add("show"));
+      openLb(t.dataset.img, t.dataset.title);
     });
+  });
+  // Apparel cards (event delegation also covers the duplicated cards)
+  aTrack.addEventListener("click", (e) => {
+    const card = e.target.closest(".a-card");
+    if (card) openLb(card.dataset.img, card.dataset.title, card.style.getPropertyValue("--c"));
   });
   $("#lbClose").addEventListener("click", closeLb);
   lb.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
