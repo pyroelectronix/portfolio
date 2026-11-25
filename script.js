@@ -182,37 +182,80 @@
   showCategory(null);
   chips.forEach((chip) => chip.addEventListener("click", () => showCategory(chip.dataset.filter)));
 
-  // Lightbox
+  // Lightbox with previous / next arrows (also the keyboard arrow keys and swiping on touch screens)
   const lb = $("#lightbox");
   const lbBody = $("#lbBody");
   const lbCap = $("#lbCap");
+  const lbCount = $("#lbCount");
+  let lbItems = [];
+  let lbIndex = 0;
+  const toItem = (el) => ({ img: el.dataset.img, title: el.dataset.title, bg: el.style.getPropertyValue("--c") });
+  const lbShow = (i, dir = 0) => {
+    const n = lbItems.length;
+    lbIndex = (i + n) % n;
+    const it = lbItems[lbIndex];
+    lbBody.style.backgroundImage = it.img ? `url("${it.img}")` : "";
+    lbBody.style.backgroundColor = it.bg || "";
+    lbCap.textContent = it.title || "";
+    lbCount.textContent = n > 1 ? `${lbIndex + 1} / ${n}` : "";
+    lb.classList.toggle("single", n < 2);
+    if (dir && !reduced) {
+      lbBody.animate(
+        [{ opacity: 0, transform: `translateX(${dir * 40}px)` }, { opacity: 1, transform: "none" }],
+        { duration: 350, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+      );
+    }
+    // preload the neighbours so the next picture appears instantly
+    [lbIndex + 1, lbIndex - 1].forEach((k) => {
+      const nb = lbItems[(k + n) % n];
+      if (nb && nb.img) new Image().src = nb.img;
+    });
+  };
+  const lbStep = (d) => { if (lbItems.length > 1) lbShow(lbIndex + d, d); };
+  const openLb = (items, index) => {
+    lbItems = items;
+    lbShow(index);
+    lb.classList.add("open");
+    lb.setAttribute("aria-hidden", "false");
+    requestAnimationFrame(() => lb.classList.add("show"));
+  };
   const closeLb = () => {
     lb.classList.remove("show");
     lb.setAttribute("aria-hidden", "true");
     setTimeout(() => lb.classList.remove("open"), 400);
   };
-  const openLb = (img, title, bg) => {
-    lbBody.style.backgroundImage = img ? `url("${img}")` : "";
-    lbBody.style.backgroundColor = bg || "";
-    lbCap.textContent = title || "";
-    lb.classList.add("open");
-    lb.setAttribute("aria-hidden", "false");
-    requestAnimationFrame(() => lb.classList.add("show"));
-  };
+  // work tiles: browse the tiles of the open category
   tiles.forEach((t) => {
     t.addEventListener("click", (e) => {
       e.preventDefault();
-      openLb(t.dataset.img, t.dataset.title);
+      const list = tiles.filter((x) => !x.classList.contains("hidden"));
+      openLb(list.map(toItem), list.indexOf(t));
     });
   });
-  // Apparel cards
+  // apparel cards: browse all apparel designs
   aTrack.addEventListener("click", (e) => {
     const card = e.target.closest(".a-card");
-    if (card && !dragMoved) openLb(card.dataset.img, card.dataset.title, card.style.getPropertyValue("--c"));
+    if (card && !dragMoved) openLb(aCards.map(toItem), aCards.indexOf(card));
   });
   $("#lbClose").addEventListener("click", closeLb);
+  $("#lbPrev").addEventListener("click", () => lbStep(-1));
+  $("#lbNext").addEventListener("click", () => lbStep(1));
   lb.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
-  addEventListener("keydown", (e) => { if (e.key === "Escape") closeLb(); });
+  addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLb();
+    else if (lb.classList.contains("open")) {
+      if (e.key === "ArrowRight") lbStep(1);
+      else if (e.key === "ArrowLeft") lbStep(-1);
+    }
+  });
+  let lbTouchX = null;
+  lb.addEventListener("touchstart", (e) => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener("touchend", (e) => {
+    if (lbTouchX === null) return;
+    const dx = e.changedTouches[0].clientX - lbTouchX;
+    lbTouchX = null;
+    if (Math.abs(dx) > 50) lbStep(dx < 0 ? 1 : -1);
+  }, { passive: true });
 
   if (!canHover || reduced) return;
 
