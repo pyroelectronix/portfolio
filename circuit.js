@@ -178,10 +178,10 @@
     const target = pulseTarget();
     for (let i = 0; i < target; i++) spawn(null, true);
 
-    canvas.style.opacity = "1";
+    canvas.style.opacity = "0.32"; // overall visibility of the background
   }
 
-  const pulseTarget = () => Math.max(12, Math.min(90, Math.round(traces.length * 0.45)));
+  const pulseTarget = () => Math.max(12, Math.min(90, Math.round(traces.length * 0.22)));
 
   function spawn(tr, spread, startD, speed) {
     if (!traces.length) return;
@@ -189,7 +189,7 @@
     pulses.push({
       tr: t,
       d: startD != null ? startD : spread ? rand(-t.len * 0.2, t.len) : -rand(0, 40),
-      v: speed || rand(110, 250),
+      v: speed || rand(70, 150),
       tail: rand(70, 150),
       hit: false,
     });
