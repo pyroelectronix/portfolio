@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Urbanist:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <link rel="stylesheet" href="styles.css?v=10" />
 </head>
 <body>
   <div class="loader" id="loader" aria-hidden="true"><span>IM<b>.</b></span></div>
@@ -137,7 +137,7 @@
         <h2 class="display section-title split" data-split>Selected work</h2>
         <div class="filters reveal" role="tablist" aria-label="Filter projects">
           <button class="pill chip" data-filter="branding">Certificates</button>
-          <button class="pill chip" data-filter="logo">Tarpaulin</button>
+          <button class="pill chip" data-filter="logo">Graphic Materials</button>
           <button class="pill chip" data-filter="social">Apparel Design</button>
           <button class="pill chip" data-filter="poster">Website and Web Application</button>
         </div>
@@ -282,12 +282,58 @@
         </div>
       </div>
 
+      <!-- GRAPHIC MATERIALS: same rotating 3D ring as the other tabs (hover to pause, drag, arrows, click to view).
+           To add one: put the image in assets/graphics/, then copy one <button class="a-card"> block and change data-img, data-title, src, alt and the two text lines. -->
+      <div class="apparel" id="graphics" data-cat="logo">
+        <div class="apparel-head">
+          <span class="a-hint">Hover to pause &middot; drag to spin &middot; click to view</span>
+        </div>
+        <div class="a-marquee wide" id="graphicsMarquee">
+          <div class="a-track" id="graphicsTrack">
+          <button class="a-card" type="button" data-img="assets/graphics/soon-to-rise.webp" data-title="Soon To Rise - Fire Station Tarpaulin" style="--c:#0b1b4f">
+            <span class="a-img"><img src="assets/graphics/soon-to-rise.webp" width="1600" height="1333" decoding="async" alt="Soon To Rise - Fire Station Tarpaulin" /></span>
+            <span class="a-meta"><b>Soon To Rise - Fire Station Tarpaulin</b><small>Tarpaulin &middot; 6x5 ft</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/graphics/trophy-champion.webp" data-title="Urban Fire Olympics Trophy" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/graphics/trophy-champion.webp" width="1200" height="1600" decoding="async" alt="Urban Fire Olympics Trophy" /></span>
+            <span class="a-meta"><b>Urban Fire Olympics Trophy</b><small>Trophy layout &middot; Champion</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/graphics/kaway-tarpaulin.webp" data-title="1st Kaway Sepak Takraw" style="--c:#e9e6c8">
+            <span class="a-img"><img src="assets/graphics/kaway-tarpaulin.webp" width="1600" height="1422" decoding="async" alt="1st Kaway Sepak Takraw" /></span>
+            <span class="a-meta"><b>1st Kaway Sepak Takraw</b><small>Tarpaulin &middot; Invitational Tournament</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/graphics/inauguration-4x8.webp" data-title="Inauguration &amp; Blessing" style="--c:#e64242">
+            <span class="a-img"><img src="assets/graphics/inauguration-4x8.webp" width="1600" height="800" decoding="async" loading="lazy" alt="Inauguration &amp; Blessing" /></span>
+            <span class="a-meta"><b>Inauguration &amp; Blessing</b><small>Tarpaulin &middot; 4x8 ft</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/graphics/stationery-vision-mission.webp" data-title="BFP Vision, Mission &amp; Ground Breaking" style="--c:#7a3b5f">
+            <span class="a-img"><img src="assets/graphics/stationery-vision-mission.webp" width="1131" height="1600" decoding="async" loading="lazy" alt="BFP Vision, Mission &amp; Ground Breaking" /></span>
+            <span class="a-meta"><b>BFP Vision, Mission &amp; Ground Breaking</b><small>Stationery / Document layout</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/graphics/groundbreaking-welcome.webp" data-title="Groundbreaking Ceremony" style="--c:#eef2f8">
+            <span class="a-img"><img src="assets/graphics/groundbreaking-welcome.webp" width="1600" height="960" decoding="async" loading="lazy" alt="Groundbreaking Ceremony" /></span>
+            <span class="a-meta"><b>Groundbreaking Ceremony</b><small>Welcome backdrop</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/graphics/kickoff-brochure.webp" data-title="Fire Prevention Month Kick Off" style="--c:#f3e0cc">
+            <span class="a-img"><img src="assets/graphics/kickoff-brochure.webp" width="1131" height="1600" decoding="async" loading="lazy" alt="Fire Prevention Month Kick Off" /></span>
+            <span class="a-meta"><b>Fire Prevention Month Kick Off</b><small>Brochure &middot; Hymn, Vision &amp; Mission</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/graphics/kickoff-program.webp" data-title="Kick Off Ceremony Program" style="--c:#f4eeea">
+            <span class="a-img"><img src="assets/graphics/kickoff-program.webp" width="1131" height="1600" decoding="async" loading="lazy" alt="Kick Off Ceremony Program" /></span>
+            <span class="a-meta"><b>Kick Off Ceremony Program</b><small>Program layout &middot; FPM 2025</small></span>
+          </button>
+          </div>
+        </div>
+        <div class="a-nav">
+          <button class="a-btn" type="button" aria-label="Previous graphic">&#8249;</button>
+          <button class="a-btn" type="button" aria-label="Next graphic">&#8250;</button>
+        </div>
+      </div>
+
       <div class="grid" id="grid">
         <!-- EDIT: set data-img to your image path (e.g. assets/work-1.jpg) and update the title.
-             data-cat must stay one of: branding (Certificates), logo (Tarpaulin), social (Apparel Design), poster (Website and Web Application) -->
-        <a class="tile reveal" data-cat="logo" data-title="Project Two" data-img="" href="#work"><span class="num">02</span><span class="t">Project Two</span><span class="c">Tarpaulin</span></a>
+             data-cat must stay one of: branding (Certificates), logo (Graphic Materials), social (Apparel Design), poster (Website and Web Application) -->
         <a class="tile reveal" data-cat="poster" data-title="Project Four" data-img="" href="#work"><span class="num">04</span><span class="t">Project Four</span><span class="c">Website and Web Application</span></a>
-        <a class="tile reveal" data-cat="logo" data-title="Project Six" data-img="" href="#work"><span class="num">06</span><span class="t">Project Six</span><span class="c">Tarpaulin</span></a>
       </div>
     </section>
 
@@ -318,7 +364,7 @@
     <p class="lb-count" id="lbCount"></p>
   </div>
 
-  <script src="circuit.js?v=9"></script>
-  <script src="script.js?v=9"></script>
+  <script src="circuit.js?v=10"></script>
+  <script src="script.js?v=10"></script>
 </body>
 </html>
