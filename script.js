@@ -94,6 +94,20 @@
     const N = cards.length;
     const STEP = 360 / N;
     let angle = 0, R = 0, vel = 0, hold = false, drag = false, moved = false, tween = null, inView = false, last = performance.now();
+    // Load the card pictures straight away (lazy loading is unreliable inside a rotating 3D ring)
+    // and retry a picture that failed once, for example while a fresh deploy is still settling.
+    $$("img", track).forEach((img) => {
+      img.loading = "eager";
+      const base = img.getAttribute("src");
+      let tries = 0;
+      const retry = () => {
+        if (tries >= 3) return;
+        tries++;
+        setTimeout(() => { img.src = `${base}?r=${Date.now()}`; }, 600 * tries);
+      };
+      img.addEventListener("error", retry);
+      if (img.complete && !img.naturalWidth && tries === 0 && img.getAttribute("src")) retry();
+    });
     const hint = $(".a-hint", section);
     if (!canHover && hint) hint.textContent = "Drag to spin · tap to view";
 
