@@ -83,90 +83,100 @@
     if (t.dataset.img) t.style.backgroundImage = `url("${t.dataset.img}")`;
   });
 
-  // Apparel carousel: cards sit on a 3D ring that rotates continuously.
-  // It eases to a stop while the pointer is over it (or it is focused, touched or dragged)
-  // and picks up again when the pointer leaves.
-  const apparel = $("#apparel");
-  const aWrap = $("#apparelMarquee");
-  const aTrack = $("#aTrack");
-  const aCards = $$(".a-card", aTrack);
+  // 3D ring carousel (used by Apparel Design and Certificates).
+  // Cards sit on a ring that rotates continuously. It eases to a stop while the pointer is over it
+  // (or it is focused, touched or dragged) and picks up again when the pointer leaves.
   const A_SPEED = 4; // degrees per second, raise for faster rotation (360 = one full turn)
-  const A_N = aCards.length;
-  const A_STEP = 360 / A_N;
-  let aAngle = 0, aR = 0, aVel = 0, aHold = false, aDrag = false, dragMoved = false, aTween = null, aInView = false, aLast = performance.now();
-  const aHint = $(".a-hint");
-  if (!canHover && aHint) aHint.textContent = "Drag to spin · tap to view";
+  const makeRing = (section, onOpen) => {
+    const wrap = $(".a-marquee", section);
+    const track = $(".a-track", section);
+    const cards = $$(".a-card", track);
+    const N = cards.length;
+    const STEP = 360 / N;
+    let angle = 0, R = 0, vel = 0, hold = false, drag = false, moved = false, tween = null, inView = false, last = performance.now();
+    const hint = $(".a-hint", section);
+    if (!canHover && hint) hint.textContent = "Drag to spin · tap to view";
 
-  const aRender = () => {
-    aTrack.style.transform = `translateZ(${-aR}px) rotateY(${aAngle}deg)`;
-    aCards.forEach((card, i) => {
-      const a = ((((i * A_STEP + aAngle) % 360) + 540) % 360) - 180; // -180..180, 0 = facing front
-      card.style.setProperty("--dim", ((1 - Math.cos((a * Math.PI) / 180)) * 0.38).toFixed(3));
-    });
-  };
-  const aLayout = () => {
-    const cw = aTrack.offsetWidth;
-    if (!cw) return; // hidden
-    aR = Math.round((cw / 2 / Math.tan(Math.PI / A_N)) * 1.12);
-    aCards.forEach((card, i) => (card.style.transform = `rotateY(${i * A_STEP}deg) translateZ(${aR}px)`));
-    aRender();
-  };
-  const aTick = (now) => {
-    const dt = Math.min((now - aLast) / 1000, 0.05);
-    aLast = now;
-    if (aInView && aR && !apparel.classList.contains("hidden")) {
-      if (aTween !== null) {
-        const d = aTween - aAngle;
-        aAngle += d * Math.min(1, dt * 7);
-        if (Math.abs(d) < 0.05) { aAngle = aTween; aTween = null; }
-        aRender();
-      } else if (!aDrag) {
-        const target = aHold || reduced ? 0 : -A_SPEED;
-        aVel += (target - aVel) * Math.min(1, dt * 6); // ease in / out
-        if (Math.abs(aVel) > 0.001) { aAngle += aVel * dt; aRender(); }
+    const render = () => {
+      track.style.transform = `translateZ(${-R}px) rotateY(${angle}deg)`;
+      cards.forEach((card, i) => {
+        const a = ((((i * STEP + angle) % 360) + 540) % 360) - 180; // -180..180, 0 = facing front
+        card.style.setProperty("--dim", ((1 - Math.cos((a * Math.PI) / 180)) * 0.38).toFixed(3));
+      });
+    };
+    const layout = () => {
+      const cw = track.offsetWidth;
+      if (!cw) return; // hidden
+      R = Math.round((cw / 2 / Math.tan(Math.PI / N)) * 1.12);
+      cards.forEach((card, i) => (card.style.transform = `rotateY(${i * STEP}deg) translateZ(${R}px)`));
+      render();
+    };
+    const tick = (now) => {
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      if (inView && R && !section.classList.contains("hidden")) {
+        if (tween !== null) {
+          const d = tween - angle;
+          angle += d * Math.min(1, dt * 7);
+          if (Math.abs(d) < 0.05) { angle = tween; tween = null; }
+          render();
+        } else if (!drag) {
+          const target = hold || reduced ? 0 : -A_SPEED;
+          vel += (target - vel) * Math.min(1, dt * 6); // ease in / out
+          if (Math.abs(vel) > 0.001) { angle += vel * dt; render(); }
+        }
       }
-    }
-    requestAnimationFrame(aTick);
+      requestAnimationFrame(tick);
+    };
+    new IntersectionObserver((en) => { inView = en[0].isIntersecting; }).observe(wrap);
+    addEventListener("resize", layout);
+    addEventListener("load", layout);
+    requestAnimationFrame(tick);
+
+    // pause while pointing at / focusing / touching the cards
+    wrap.addEventListener("mouseenter", () => (hold = true));
+    wrap.addEventListener("mouseleave", () => (hold = false));
+    wrap.addEventListener("focusin", () => (hold = true));
+    wrap.addEventListener("focusout", () => (hold = false));
+    let touchTimer;
+    wrap.addEventListener("touchstart", () => { clearTimeout(touchTimer); hold = true; }, { passive: true });
+    const touchEnd = () => { clearTimeout(touchTimer); touchTimer = setTimeout(() => (hold = false), 1800); };
+    wrap.addEventListener("touchend", touchEnd, { passive: true });
+    wrap.addEventListener("touchcancel", touchEnd, { passive: true });
+
+    // drag (mouse or finger) to spin the ring
+    let startX = 0, startAngle = 0;
+    wrap.addEventListener("pointerdown", (e) => {
+      drag = true; moved = false; tween = null;
+      startX = e.clientX; startAngle = angle;
+    });
+    addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 6) moved = true;
+      if (moved) { angle = startAngle + dx * 0.3; render(); }
+    });
+    const endDrag = () => { if (drag) { drag = false; vel = 0; setTimeout(() => (moved = false), 0); } };
+    addEventListener("pointerup", endDrag);
+    addEventListener("pointercancel", endDrag);
+
+    // previous / next buttons
+    const go = (dir) => {
+      const base = tween !== null ? tween : angle;
+      tween = Math.round(base / STEP) * STEP + dir * STEP;
+    };
+    const btns = $$(".a-nav .a-btn", section);
+    btns[0]?.addEventListener("click", () => go(1));
+    btns[1]?.addEventListener("click", () => go(-1));
+
+    // click a card to open it in the viewer (ignored after a drag)
+    track.addEventListener("click", (e) => {
+      const card = e.target.closest(".a-card");
+      if (card && !moved) onOpen(cards, cards.indexOf(card));
+    });
+    return { section, layout };
   };
-  new IntersectionObserver((en) => { aInView = en[0].isIntersecting; }).observe(aWrap);
-  addEventListener("resize", aLayout);
-  addEventListener("load", aLayout);
-  requestAnimationFrame(aTick);
-
-  // pause while pointing at / focusing / touching the designs
-  aWrap.addEventListener("mouseenter", () => (aHold = true));
-  aWrap.addEventListener("mouseleave", () => (aHold = false));
-  aWrap.addEventListener("focusin", () => (aHold = true));
-  aWrap.addEventListener("focusout", () => (aHold = false));
-  let aTouchTimer;
-  aWrap.addEventListener("touchstart", () => { clearTimeout(aTouchTimer); aHold = true; }, { passive: true });
-  const aTouchEnd = () => { clearTimeout(aTouchTimer); aTouchTimer = setTimeout(() => (aHold = false), 1800); };
-  aWrap.addEventListener("touchend", aTouchEnd, { passive: true });
-  aWrap.addEventListener("touchcancel", aTouchEnd, { passive: true });
-
-  // drag (mouse or finger) to spin the ring
-  let aStartX = 0, aStartAngle = 0;
-  aWrap.addEventListener("pointerdown", (e) => {
-    aDrag = true; dragMoved = false; aTween = null;
-    aStartX = e.clientX; aStartAngle = aAngle;
-  });
-  addEventListener("pointermove", (e) => {
-    if (!aDrag) return;
-    const dx = e.clientX - aStartX;
-    if (Math.abs(dx) > 6) dragMoved = true;
-    if (dragMoved) { aAngle = aStartAngle + dx * 0.3; aRender(); }
-  });
-  const aEndDrag = () => { if (aDrag) { aDrag = false; aVel = 0; setTimeout(() => (dragMoved = false), 0); } };
-  addEventListener("pointerup", aEndDrag);
-  addEventListener("pointercancel", aEndDrag);
-
-  // previous / next buttons
-  const aGo = (dir) => {
-    const base = aTween !== null ? aTween : aAngle;
-    aTween = Math.round(base / A_STEP) * A_STEP + dir * A_STEP;
-  };
-  $("#aPrev")?.addEventListener("click", () => aGo(1));
-  $("#aNext")?.addEventListener("click", () => aGo(-1));
+  const rings = $$(".apparel").map((sec) => makeRing(sec, (cards, i) => openLb(cards.map(toItem), i)));
 
   // Selected work: nothing is shown until a category tab is clicked
   const tiles = $$(".tile");
@@ -175,10 +185,12 @@
   const showCategory = (f) => {
     chips.forEach((c) => c.classList.toggle("active", c.dataset.filter === f));
     tiles.forEach((t) => t.classList.toggle("hidden", t.dataset.cat !== f));
-    const showApparel = f === apparel.dataset.cat;
-    apparel.classList.toggle("hidden", !showApparel);
+    rings.forEach((r) => {
+      const show = f === r.section.dataset.cat;
+      r.section.classList.toggle("hidden", !show);
+      if (show) r.layout();
+    });
     workEmpty?.classList.toggle("hidden", !!f);
-    if (showApparel) aLayout();
   };
   showCategory(null);
   chips.forEach((chip) => chip.addEventListener("click", () => showCategory(chip.dataset.filter)));
@@ -232,11 +244,6 @@
       const list = tiles.filter((x) => !x.classList.contains("hidden"));
       openLb(list.map(toItem), list.indexOf(t));
     });
-  });
-  // apparel cards: browse all apparel designs
-  aTrack.addEventListener("click", (e) => {
-    const card = e.target.closest(".a-card");
-    if (card && !dragMoved) openLb(aCards.map(toItem), aCards.indexOf(card));
   });
   $("#lbClose")?.addEventListener("click", closeLb);
   $("#lbPrev")?.addEventListener("click", () => lbStep(-1));
