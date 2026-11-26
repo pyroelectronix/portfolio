@@ -224,14 +224,17 @@ body.ready .split .ch, .split.in .ch { transform: translateY(0); }
 .a-marquee {
   --cw: clamp(190px, 19vw, 250px);
   position: relative; overflow: hidden; perspective: 1800px; perspective-origin: 50% 40%;
-  height: calc(var(--cw) + 140px);
+  height: calc(var(--cw) / var(--ar, 1) + 140px);
   cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 .a-marquee:active { cursor: grabbing; }
+/* Certificates are landscape (A4-like), so the cards are wider */
+.a-marquee.landscape { --cw: clamp(260px, 30vw, 360px); --ar: 1.4146; }
+.a-marquee.landscape .a-img img { object-fit: cover; }
 .a-track {
-  position: absolute; top: 50px; left: 50%; width: var(--cw); height: calc(var(--cw) + 72px); margin-left: calc(var(--cw) / -2);
+  position: absolute; top: 50px; left: 50%; width: var(--cw); height: calc(var(--cw) / var(--ar, 1) + 72px); margin-left: calc(var(--cw) / -2);
   transform-style: preserve-3d; will-change: transform;
 }
 .a-card {
@@ -241,7 +244,7 @@ body.ready .split .ch, .split.in .ch { transform: translateY(0); }
   transition: border-color 0.4s, box-shadow 0.5s var(--ease);
 }
 .a-card::after { content: ""; position: absolute; inset: 0; background: #000; opacity: var(--dim, 0); pointer-events: none; }
-.a-img { display: block; aspect-ratio: 1 / 1; background: var(--c, #222); overflow: hidden; }
+.a-img { display: block; aspect-ratio: var(--ar, 1); background: var(--c, #222); overflow: hidden; }
 .a-img img { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; -webkit-user-drag: none; transition: transform 0.8s var(--ease); }
 .a-meta { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0.1rem; padding: 0.5rem 1rem; border-top: 1px solid var(--line); }
 .a-meta b { font-weight: 600; font-size: 0.95rem; color: #fff; line-height: 1.25; }
