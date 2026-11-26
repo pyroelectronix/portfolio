@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Urbanist:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <link rel="stylesheet" href="styles.css?v=9" />
 </head>
 <body>
   <div class="loader" id="loader" aria-hidden="true"><span>IM<b>.</b></span></div>
@@ -238,13 +238,55 @@
         </div>
       </div>
 
+      <!-- CERTIFICATES: same rotating 3D ring as Apparel Design (hover to pause, drag, arrows, click to view).
+           To add a certificate: put the image in assets/certificates/, then copy one <button class="a-card"> block and change data-img, data-title, src, alt and the two text lines. -->
+      <div class="apparel" id="certs" data-cat="branding">
+        <div class="apparel-head">
+          <span class="a-hint">Hover to pause &middot; drag to spin &middot; click to view</span>
+        </div>
+        <div class="a-marquee landscape" id="certMarquee">
+          <div class="a-track" id="certTrack">
+          <button class="a-card" type="button" data-img="assets/certificates/canvas-painting-1st.webp" data-title="Canvas Painting - 1st Place" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/certificates/canvas-painting-1st.webp" width="1600" height="1131" decoding="async" loading="lazy" alt="Canvas Painting - 1st Place certificate" /></span>
+            <span class="a-meta"><b>Canvas Painting - 1st Place</b><small>Fire Prevention Month 2025</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/certificates/kaway-sepak-takraw.webp" data-title="Kaway Festival Sepak Takraw" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/certificates/kaway-sepak-takraw.webp" width="1600" height="1131" decoding="async" loading="lazy" alt="Kaway Festival Sepak Takraw certificate" /></span>
+            <span class="a-meta"><b>Kaway Festival Sepak Takraw</b><small>Champion &middot; 2025</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/certificates/fpm-appreciation-activities.webp" data-title="Appreciation - FPM Activities" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/certificates/fpm-appreciation-activities.webp" width="1600" height="1131" decoding="async" loading="lazy" alt="Certificate of Appreciation certificate" /></span>
+            <span class="a-meta"><b>Appreciation - FPM Activities</b><small>Fire Prevention Month 2025</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/certificates/fpm-appreciation-contribution.webp" data-title="Appreciation - Contribution" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/certificates/fpm-appreciation-contribution.webp" width="1600" height="1131" decoding="async" loading="lazy" alt="Certificate of Appreciation certificate" /></span>
+            <span class="a-meta"><b>Appreciation - Contribution</b><small>Fire Prevention Month 2025</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/certificates/ufo-2025-overall-champion.webp" data-title="Urban Fire Olympics 2025" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/certificates/ufo-2025-overall-champion.webp" width="1600" height="1131" decoding="async" loading="lazy" alt="Urban Fire Olympics 2025 certificate" /></span>
+            <span class="a-meta"><b>Urban Fire Olympics 2025</b><small>Over-all Champion</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/certificates/ufo-2024-appreciation.webp" data-title="Urban Fire Olympics 2024" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/certificates/ufo-2024-appreciation.webp" width="1600" height="1131" decoding="async" loading="lazy" alt="Urban Fire Olympics 2024 certificate" /></span>
+            <span class="a-meta"><b>Urban Fire Olympics 2024</b><small>Certificate of Appreciation</small></span>
+          </button>
+          <button class="a-card" type="button" data-img="assets/certificates/ufo-2024-overall-champion.webp" data-title="Urban Fire Olympics 2024" style="--c:#ffffff">
+            <span class="a-img"><img src="assets/certificates/ufo-2024-overall-champion.webp" width="1600" height="1131" decoding="async" loading="lazy" alt="Urban Fire Olympics 2024 certificate" /></span>
+            <span class="a-meta"><b>Urban Fire Olympics 2024</b><small>Over-all Champion</small></span>
+          </button>
+          </div>
+        </div>
+        <div class="a-nav">
+          <button class="a-btn" type="button" aria-label="Previous certificate">&#8249;</button>
+          <button class="a-btn" type="button" aria-label="Next certificate">&#8250;</button>
+        </div>
+      </div>
+
       <div class="grid" id="grid">
         <!-- EDIT: set data-img to your image path (e.g. assets/work-1.jpg) and update the title.
              data-cat must stay one of: branding (Certificates), logo (Tarpaulin), social (Apparel Design), poster (Website and Web Application) -->
-        <a class="tile reveal" data-cat="branding" data-title="Project One" data-img="" href="#work"><span class="num">01</span><span class="t">Project One</span><span class="c">Certificates</span></a>
         <a class="tile reveal" data-cat="logo" data-title="Project Two" data-img="" href="#work"><span class="num">02</span><span class="t">Project Two</span><span class="c">Tarpaulin</span></a>
         <a class="tile reveal" data-cat="poster" data-title="Project Four" data-img="" href="#work"><span class="num">04</span><span class="t">Project Four</span><span class="c">Website and Web Application</span></a>
-        <a class="tile reveal" data-cat="branding" data-title="Project Five" data-img="" href="#work"><span class="num">05</span><span class="t">Project Five</span><span class="c">Certificates</span></a>
         <a class="tile reveal" data-cat="logo" data-title="Project Six" data-img="" href="#work"><span class="num">06</span><span class="t">Project Six</span><span class="c">Tarpaulin</span></a>
       </div>
     </section>
@@ -277,6 +319,6 @@
   </div>
 
   <script src="circuit.js?v=8"></script>
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=9"></script>
 </body>
 </html>
