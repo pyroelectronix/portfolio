@@ -41,76 +41,37 @@
     });
   });
 
-  // Bouncing letters: random letters are thrown around, bounce off the floor and the screen edges,
-  // then land one by one (left to right) on the correct letter until the word is spelled.
-  const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const rnd = (a, b) => a + Math.random() * (b - a);
-  const scramble = (el) => {
+  // Bouncing letters: each letter drops in and settles with a few smooth, shrinking bounces.
+  // The letters land in a random order until the word "Portfolio" is spelled out.
+  const bounceIn = (el) => {
     const chars = $$(".ch", el);
-    const finals = chars.map((c) => c.textContent);
-    const vw = document.documentElement.clientWidth;
-    const GRAV = 2600, REST = 0.6;
-    const L = chars.map((c, i) => {
-      const r = c.getBoundingClientRect();
-      const minX = 40 - r.left, maxX = vw - 40 - r.right; // keep inside the screen
-      return {
-        c, w: r.width, minX, maxX,
-        x: rnd(minX, maxX), y: -rnd(Math.min(r.top, 260) * 0.3, Math.min(r.top, 260)),
-        vx: rnd(160, 520) * (Math.random() < 0.5 ? -1 : 1), vy: rnd(-300, 100),
-        rot: rnd(-40, 40), vr: rnd(-260, 260),
-        release: 1000 + i * 170, locked: false, done: false, k: -1,
-      };
+    const order = chars.map((_, i) => i).sort(() => Math.random() - 0.5); // random landing order
+    const E_IN = "cubic-bezier(0.5, 0, 0.9, 0.55)";   // falling: speeds up
+    const E_OUT = "cubic-bezier(0.1, 0.45, 0.5, 1)";  // rising: slows at the top
+    chars.forEach((c, i) => {
+      const delay = order.indexOf(i) * 130;
+      const anim = c.animate(
+        [
+          { transform: "translateY(-160%)", opacity: 0, offset: 0, easing: E_IN },
+          { transform: "translateY(0)", opacity: 1, offset: 0.38, easing: E_OUT },
+          { transform: "translateY(-30%)", opacity: 1, offset: 0.58, easing: E_IN },
+          { transform: "translateY(0)", opacity: 1, offset: 0.74, easing: E_OUT },
+          { transform: "translateY(-10%)", opacity: 1, offset: 0.86, easing: E_IN },
+          { transform: "translateY(0)", opacity: 1, offset: 0.94, easing: E_OUT },
+          { transform: "translateY(-2.5%)", opacity: 1, offset: 0.97, easing: E_IN },
+          { transform: "translateY(0)", opacity: 1, offset: 1 },
+        ],
+        { duration: 1500, delay, fill: "both" }
+      );
+      anim.onfinish = () => { c.style.opacity = "1"; anim.cancel(); };
     });
-    L.forEach((o) => { o.c.style.minWidth = o.w + "px"; o.c.textContent = GLYPHS[(Math.random() * GLYPHS.length) | 0]; o.c.style.opacity = "1"; });
-    document.documentElement.style.overflowX = "clip"; // never show a sideways scrollbar while letters fly
-    const t0 = performance.now();
-    let last = t0;
-    const frame = (now) => {
-      const dt = Math.min((now - last) / 1000, 0.033);
-      last = now;
-      const t = now - t0;
-      let busy = false;
-      L.forEach((o, i) => {
-        if (o.done) return;
-        busy = true;
-        if (!o.locked && t >= o.release) { o.locked = true; o.c.textContent = finals[i]; }
-        if (!o.locked) {
-          // flicker through random letters while flying
-          const k = Math.floor(t / 90 + i * 3);
-          if (k !== o.k) { o.k = k; o.c.textContent = GLYPHS[(Math.random() * GLYPHS.length) | 0]; }
-          o.x += o.vx * dt;
-          if (o.x < o.minX) { o.x = o.minX; o.vx = Math.abs(o.vx); }
-          if (o.x > o.maxX) { o.x = o.maxX; o.vx = -Math.abs(o.vx); }
-          o.rot += o.vr * dt;
-        } else {
-          // glide back above its own spot, spin straight
-          o.vx += (-o.x * 60 - o.vx * 11) * dt;
-          o.x += o.vx * dt;
-          o.rot += (-o.rot * 12) * dt;
-        }
-        o.vy += GRAV * dt;
-        o.y += o.vy * dt;
-        if (o.y > 0) { // bounce on the floor (the letter's own baseline)
-          o.y = 0;
-          o.vy = -Math.abs(o.vy) * REST;
-          if (!o.locked && Math.abs(o.vy) < 140) o.vy = -rnd(500, 900); // keep unlocked letters bouncing
-        }
-        if (o.locked && Math.abs(o.x) < 0.6 && Math.abs(o.y) < 0.6 && Math.abs(o.vy) < 40 && Math.abs(o.rot) < 0.5) {
-          o.done = true; o.c.style.transform = ""; o.c.style.minWidth = ""; return;
-        }
-        o.c.style.transform = `translate(${o.x.toFixed(1)}px, ${o.y.toFixed(1)}px) rotate(${o.rot.toFixed(1)}deg)`;
-      });
-      if (busy) requestAnimationFrame(frame);
-      else document.documentElement.style.overflowX = "";
-    };
-    requestAnimationFrame(frame);
   };
 
   // Loader, then start the cover animation
   const start = () => {
     $("#loader").classList.add("done");
     document.body.classList.add("ready");
-    if (!reduced) $$(".split.sink").forEach(scramble);
+    if (!reduced) $$(".split.sink").forEach(bounceIn);
   };
   window.addEventListener("load", () => setTimeout(start, reduced ? 0 : 650));
 
