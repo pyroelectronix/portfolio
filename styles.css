@@ -233,6 +233,13 @@ body.ready .split .ch, .split.in .ch { transform: translateY(0); }
 /* Certificates are landscape (A4-like), so the cards are wider */
 .a-marquee.landscape { --cw: clamp(190px, 19vw, 250px); --ar: 1; }
 .a-marquee.landscape .a-img img { object-fit: contain; }
+/* Certificates and graphic design: fill the whole card like Apparel Design.
+   A soft blurred copy of the picture sits behind it, so there are no empty bars and nothing is cropped. */
+.a-marquee.landscape .a-img, .a-marquee.wide .a-img { position: relative; isolation: isolate; }
+.a-marquee.landscape .a-img::before, .a-marquee.wide .a-img::before {
+  content: ""; position: absolute; inset: -12%; z-index: -1;
+  background: var(--bg) center / cover no-repeat; filter: blur(16px) saturate(1.1) brightness(0.9);
+}
 /* Graphic materials come in mixed shapes (tarpaulins, trophy, brochures), so each is shown whole */
 .a-marquee.wide { --cw: clamp(190px, 19vw, 250px); --ar: 1; }
 .a-track {
