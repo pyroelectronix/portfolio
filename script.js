@@ -41,10 +41,34 @@
     });
   });
 
+  // Scramble effect: each letter flickers through random characters, then locks onto the correct one in order.
+  const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const scramble = (el) => {
+    const chars = $$(".ch", el);
+    const finals = chars.map((c) => c.textContent);
+    chars.forEach((c) => { c.style.minWidth = c.offsetWidth + "px"; }); // keep the width steady while letters change
+    const t0 = performance.now();
+    const lockAt = (i) => 500 + i * 140;
+    let done = false;
+    const step = (now) => {
+      const t = now - t0;
+      let all = true;
+      chars.forEach((c, i) => {
+        if (t >= lockAt(i)) { if (c.textContent !== finals[i]) c.textContent = finals[i]; }
+        else { all = false; if (Math.floor(t / 70 + i * 3) !== c._k) { c._k = Math.floor(t / 70 + i * 3); c.textContent = GLYPHS[(Math.random() * GLYPHS.length) | 0]; } }
+      });
+      if (!all) requestAnimationFrame(step);
+      else if (!done) { done = true; chars.forEach((c) => (c.style.minWidth = "")); }
+    };
+    chars.forEach((c, i) => { c.textContent = GLYPHS[(Math.random() * GLYPHS.length) | 0]; });
+    requestAnimationFrame(step);
+  };
+
   // Loader, then start the cover animation
   const start = () => {
     $("#loader").classList.add("done");
     document.body.classList.add("ready");
+    if (!reduced) $$(".split.sink").forEach(scramble);
   };
   window.addEventListener("load", () => setTimeout(start, reduced ? 0 : 650));
 
