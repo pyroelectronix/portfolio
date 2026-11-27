@@ -73,7 +73,7 @@
     io.observe(el);
   });
   $$(".split").forEach((el) => { if (!el.closest(".cover")) io.observe(el); });
-  io.observe($("#timeline"));
+  $$(".timeline").forEach((t) => io.observe(t));
 
   // Back to top
   $("#toTop").addEventListener("click", () => scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }));
