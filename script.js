@@ -108,6 +108,8 @@
       img.addEventListener("error", retry);
       if (img.complete && !img.naturalWidth && tries === 0 && img.getAttribute("src")) retry();
     });
+    // blurred copy of each picture behind it (used by the Certificates / Graphic Design cards)
+    cards.forEach((card) => card.style.setProperty("--bg", `url("${card.dataset.img}")`));
     const hint = $(".a-hint", section);
     if (!canHover && hint) hint.textContent = "Drag to spin · tap to view";
 
