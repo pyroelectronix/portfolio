@@ -99,10 +99,9 @@ main, .footer { position: relative; z-index: 1; width: 100%; max-width: var(--ma
 .split .word { display: inline-block; white-space: nowrap; }
 .split .ch { display: inline-block; transform: translateY(110%); transition: transform 0.9s var(--ease); transition-delay: calc(var(--i) * 40ms); }
 body.ready .split .ch, .split.in .ch { transform: translateY(0); }
-/* "Portfolio" sinks in: letters drop into place while scrambled characters settle on the right spelling */
-.split.sink .ch { transform: translateY(-80%); opacity: 0; filter: blur(8px); text-align: center;
-  transition: transform 0.9s var(--ease), opacity 0.6s ease, filter 0.9s ease; transition-delay: calc(var(--i) * 110ms); }
-body.ready .split.sink .ch { transform: translateY(0); opacity: 1; filter: blur(0); }
+/* "Portfolio": random letters bounce around, then land one by one and spell the word (physics is in script.js) */
+.split.sink { overflow: visible; }
+.split.sink .ch { opacity: 0; transform: none; transition: none; text-align: center; will-change: transform; }
 .hello-title { white-space: nowrap; }
 
 /* Reveal */
