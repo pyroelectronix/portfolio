@@ -177,6 +177,9 @@ body.ready .split .ch, .split.in .ch { transform: translateY(0); }
 }
 .timeline li:hover::before { background: var(--accent); transform: scale(1.4); }
 .timeline b { color: #fff; }
+/* plain timeline (Skills): one line per item, dot level with the text */
+.timeline.plain { gap: 0.8rem; }
+.timeline.plain li::before { top: 0.55rem; }
 
 /* Software */
 .apps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem 1rem; }
