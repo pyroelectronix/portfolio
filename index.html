@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Urbanist:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=16" />
+  <link rel="stylesheet" href="styles.css?v=17" />
 </head>
 <body>
   <div class="loader" id="loader" aria-hidden="true"><span>IM<b>.</b></span></div>
@@ -89,9 +89,9 @@
       <div class="bento">
         <article class="card edu reveal">
           <h3>Education</h3>
-          <p class="meta">2012-2017</p>
-          <p class="strong">Southern Luzon State University, Lucban Quezon</p>
-          <p>Bachelor of Electronics and Communications Engineering</p>
+          <ol class="timeline" id="timelineEdu">
+            <li><span class="meta">2012 – 2017</span><b>Southern Luzon State University, Lucban Quezon</b><span>Bachelor of Electronics and Communications Engineering</span></li>
+          </ol>
         </article>
 
         <article class="card exp reveal">
@@ -105,12 +105,12 @@
 
         <article class="card skills reveal">
           <h3>Skills</h3>
-          <ul class="dashes">
-            <li>Engineering and Technical Services</li>
-            <li>Creative Designing/ Graphics Design</li>
-            <li>Administrative and Virtual Assistant Services</li>
-            <li>Turning Website and Web Application ideas into powerful digital experiences through AI-powered web development</li>
-          </ul>
+          <ol class="timeline plain" id="timelineSkills">
+            <li><span>Engineering and Technical Services</span></li>
+            <li><span>Creative Designing/ Graphics Design</span></li>
+            <li><span>Administrative and Virtual Assistant Services</span></li>
+            <li><span>Turning Website and Web Application ideas into powerful digital experiences through AI-powered web development</span></li>
+          </ol>
         </article>
 
         <article class="card soft reveal">
@@ -364,7 +364,7 @@
     <p class="lb-count" id="lbCount"></p>
   </div>
 
-  <script src="circuit.js?v=16"></script>
-  <script src="script.js?v=16"></script>
+  <script src="circuit.js?v=17"></script>
+  <script src="script.js?v=17"></script>
 </body>
 </html>
