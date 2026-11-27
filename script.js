@@ -41,27 +41,69 @@
     });
   });
 
-  // Scramble effect: each letter flickers through random characters, then locks onto the correct one in order.
+  // Bouncing letters: random letters are thrown around, bounce off the floor and the screen edges,
+  // then land one by one (left to right) on the correct letter until the word is spelled.
   const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const rnd = (a, b) => a + Math.random() * (b - a);
   const scramble = (el) => {
     const chars = $$(".ch", el);
     const finals = chars.map((c) => c.textContent);
-    chars.forEach((c) => { c.style.minWidth = c.offsetWidth + "px"; }); // keep the width steady while letters change
+    const vw = document.documentElement.clientWidth;
+    const GRAV = 2600, REST = 0.6;
+    const L = chars.map((c, i) => {
+      const r = c.getBoundingClientRect();
+      const minX = 40 - r.left, maxX = vw - 40 - r.right; // keep inside the screen
+      return {
+        c, w: r.width, minX, maxX,
+        x: rnd(minX, maxX), y: -rnd(Math.min(r.top, 260) * 0.3, Math.min(r.top, 260)),
+        vx: rnd(160, 520) * (Math.random() < 0.5 ? -1 : 1), vy: rnd(-300, 100),
+        rot: rnd(-40, 40), vr: rnd(-260, 260),
+        release: 1000 + i * 170, locked: false, done: false, k: -1,
+      };
+    });
+    L.forEach((o) => { o.c.style.minWidth = o.w + "px"; o.c.textContent = GLYPHS[(Math.random() * GLYPHS.length) | 0]; o.c.style.opacity = "1"; });
+    document.documentElement.style.overflowX = "clip"; // never show a sideways scrollbar while letters fly
     const t0 = performance.now();
-    const lockAt = (i) => 500 + i * 140;
-    let done = false;
-    const step = (now) => {
+    let last = t0;
+    const frame = (now) => {
+      const dt = Math.min((now - last) / 1000, 0.033);
+      last = now;
       const t = now - t0;
-      let all = true;
-      chars.forEach((c, i) => {
-        if (t >= lockAt(i)) { if (c.textContent !== finals[i]) c.textContent = finals[i]; }
-        else { all = false; if (Math.floor(t / 70 + i * 3) !== c._k) { c._k = Math.floor(t / 70 + i * 3); c.textContent = GLYPHS[(Math.random() * GLYPHS.length) | 0]; } }
+      let busy = false;
+      L.forEach((o, i) => {
+        if (o.done) return;
+        busy = true;
+        if (!o.locked && t >= o.release) { o.locked = true; o.c.textContent = finals[i]; }
+        if (!o.locked) {
+          // flicker through random letters while flying
+          const k = Math.floor(t / 90 + i * 3);
+          if (k !== o.k) { o.k = k; o.c.textContent = GLYPHS[(Math.random() * GLYPHS.length) | 0]; }
+          o.x += o.vx * dt;
+          if (o.x < o.minX) { o.x = o.minX; o.vx = Math.abs(o.vx); }
+          if (o.x > o.maxX) { o.x = o.maxX; o.vx = -Math.abs(o.vx); }
+          o.rot += o.vr * dt;
+        } else {
+          // glide back above its own spot, spin straight
+          o.vx += (-o.x * 60 - o.vx * 11) * dt;
+          o.x += o.vx * dt;
+          o.rot += (-o.rot * 12) * dt;
+        }
+        o.vy += GRAV * dt;
+        o.y += o.vy * dt;
+        if (o.y > 0) { // bounce on the floor (the letter's own baseline)
+          o.y = 0;
+          o.vy = -Math.abs(o.vy) * REST;
+          if (!o.locked && Math.abs(o.vy) < 140) o.vy = -rnd(500, 900); // keep unlocked letters bouncing
+        }
+        if (o.locked && Math.abs(o.x) < 0.6 && Math.abs(o.y) < 0.6 && Math.abs(o.vy) < 40 && Math.abs(o.rot) < 0.5) {
+          o.done = true; o.c.style.transform = ""; o.c.style.minWidth = ""; return;
+        }
+        o.c.style.transform = `translate(${o.x.toFixed(1)}px, ${o.y.toFixed(1)}px) rotate(${o.rot.toFixed(1)}deg)`;
       });
-      if (!all) requestAnimationFrame(step);
-      else if (!done) { done = true; chars.forEach((c) => (c.style.minWidth = "")); }
+      if (busy) requestAnimationFrame(frame);
+      else document.documentElement.style.overflowX = "";
     };
-    chars.forEach((c, i) => { c.textContent = GLYPHS[(Math.random() * GLYPHS.length) | 0]; });
-    requestAnimationFrame(step);
+    requestAnimationFrame(frame);
   };
 
   // Loader, then start the cover animation
